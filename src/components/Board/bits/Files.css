@@ -1,0 +1,16 @@
+.files {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--dark-tile);
+  height: 25px;
+}
+.files-dark {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--dark-tile-d);
+  height: 25px;
+}
