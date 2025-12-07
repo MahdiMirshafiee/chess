@@ -1,0 +1,16 @@
+@import "./constants.css";
+@import url('https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap');
+
+html,body {
+  margin: 0;
+  padding: 0;
+}
+
+.App{
+  display: grid;
+  place-content: center;
+  height: 100vh;
+  background: var(--bg-color);
+  font-family: "Sofia Sans", sans-serif;
+
+}
