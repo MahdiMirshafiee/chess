@@ -5,6 +5,7 @@
   --light-tile-d: #ccdae0;
   --dark-tile-d: #80a1b5;
   --bg-color: #202020;
+  --highlight: rgba(0, 0, 0, 0.1);
 }
 
 @media all and (max-width: 450px) {
