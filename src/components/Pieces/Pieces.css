@@ -127,28 +127,28 @@
 }
 
 .piece.p-04 {
-  transform: translate(0%, 2 300%);
+  transform: translate(0%, 300%);
 }
 .piece.p-14 {
-  transform: translate(100%, 2 300%);
+  transform: translate(100%, 300%);
 }
 .piece.p-24 {
-  transform: translate(200%, 2 300%);
+  transform: translate(200%, 300%);
 }
 .piece.p-34 {
-  transform: translate(300%, 2 300%);
+  transform: translate(300%, 300%);
 }
 .piece.p-44 {
-  transform: translate(400%, 2 300%);
+  transform: translate(400%, 300%);
 }
 .piece.p-54 {
-  transform: translate(500%, 2 300%);
+  transform: translate(500%, 300%);
 }
 .piece.p-64 {
-  transform: translate(600%, 2 300%);
+  transform: translate(600%, 300%);
 }
 .piece.p-74 {
-  transform: translate(700%, 2 300%);
+  transform: translate(700%, 300%);
 }
 
 .piece.p-03 {
