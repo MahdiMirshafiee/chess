@@ -38,7 +38,7 @@ function Piece({ rank, file, piece, onTouchDrop }) {
   const onTouchStart = (e) => {
     const touch = e.touches[0];
     touchStartPos.current = { x: touch.clientX, y: touch.clientY };
-    
+
     const el = pieceRef.current;
     el.style.position = "fixed";
     el.style.zIndex = "100";
@@ -47,7 +47,7 @@ function Piece({ rank, file, piece, onTouchDrop }) {
     el.style.left = `${touch.clientX - el.offsetWidth / 2}px`;
     el.style.top = `${touch.clientY - el.offsetHeight / 2}px`;
     el.style.transform = "none";
-    
+
     generateMoves();
   };
 
@@ -62,7 +62,6 @@ function Piece({ rank, file, piece, onTouchDrop }) {
   const onTouchEnd = (e) => {
     const el = pieceRef.current;
     const touch = e.changedTouches[0];
-    
 
     el.style.position = "";
     el.style.zIndex = "";
@@ -71,9 +70,12 @@ function Piece({ rank, file, piece, onTouchDrop }) {
     el.style.left = "";
     el.style.top = "";
     el.style.transform = "";
-    
 
     onTouchDrop(touch.clientX, touch.clientY, piece, rank, file);
+  };
+
+  const onClick = () => {
+    generateMoves();
   };
 
   return (
@@ -86,6 +88,7 @@ function Piece({ rank, file, piece, onTouchDrop }) {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      onClick={onClick}
     />
   );
 }
