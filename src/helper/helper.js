@@ -1,7 +1,6 @@
 export const getCharecter = (file) => String.fromCharCode(file + 96);
 
 export const createPosition = () => {
-
   const position = new Array(8).fill("").map(() => new Array(8).fill(""));
 
   for (let i = 0; i < 8; i++) {
@@ -26,4 +25,14 @@ export const createPosition = () => {
   position[7][6] = "bn";
   position[7][7] = "br";
   return position;
+};
+
+export const copyPosition = (position) => {
+  const newPosition = new Array(8).fill("").map(() => new Array(8).fill(""));
+  for (let rank = 0; rank < 8; rank++) {
+    for (let file = 0; file < 8; file++) {
+      newPosition[rank][file] = position[rank][file];
+    }
+  }
+  return newPosition;
 };
