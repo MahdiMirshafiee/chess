@@ -14,6 +14,10 @@
   height: calc(8 * var(--tile-size));
 }
 
+.tile {
+  position: relative;
+}
+
 .tile--light {
   background-color: var(--light-tile);
 }
@@ -149,4 +153,29 @@
 .music svg {
   width: 60%;
   height: 60%;
+}
+
+.highlight:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: calc(0.5 * var(--tile-size));
+  height: calc(0.5 * var(--tile-size));
+  background: var(--highlight);
+  border-radius: 50%;
+  left: 25%;
+  top: 25%;
+}
+
+.attacking:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: calc(var(--tile-size) - 12px);
+  height: calc(var(--tile-size) - 12px);
+  background: var(--highlight);
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  border: 6px solid var(--highlight);
 }
