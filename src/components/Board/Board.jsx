@@ -4,11 +4,14 @@ import Files from "./bits/Files";
 import Ranks from "./bits/Ranks";
 import "./Board.css";
 import musicFile from "../../assets/Chess-music.mp3";
+import { useAppContext } from "../../contexts/Context";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
+  const { appState } = useAppContext();
+  const position = appState.position[appState.position.length - 1];
 
   useEffect(() => {
     document.cookie.split("=")[1] === theme
@@ -41,6 +44,10 @@ function Board() {
     theme === "light"
       ? (c += (i + j) % 2 === 0 ? " tile--dark" : " tile--light")
       : (c += (i + j) % 2 === 0 ? " tile--dark-d" : " tile--light-d");
+    if (appState.candidateMoves?.find((m) => m[0] === i && m[1] === j)) {
+      if (position[i][j]) c += ` attacking`;
+      else c += ` highlight`;
+    }
     return c;
   };
 
@@ -103,8 +110,8 @@ function Board() {
           {ranks.map((rank, i) =>
             files.map((file, j) => (
               <div
-                key={file + "-" + rank}
-                className={getClassName(9 - i, j)}
+                key={file + "" + rank}
+                className={getClassName(7 - i, j)}
               ></div>
             ))
           )}
