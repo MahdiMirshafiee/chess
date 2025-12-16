@@ -7,13 +7,15 @@ function Piece({ rank, file, piece, onTouchDrop }) {
   const { appState, dispatch } = useAppContext();
   const { turn, position } = appState;
   const currentPosition = position[position.length - 1];
+  const prevPosition = position[position.length - 2];
   const pieceRef = useRef(null);
   const touchStartPos = useRef({ x: 0, y: 0 });
 
   const generateMoves = () => {
     if (turn === piece[0]) {
-      const candidateMoves = arbiter.getRegularMoves({
+      const candidateMoves = arbiter.getValidMoves({
         position: currentPosition,
+        prevPosition: prevPosition,
         piece,
         rank,
         file,

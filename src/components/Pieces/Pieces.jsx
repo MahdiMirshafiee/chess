@@ -19,10 +19,14 @@ function Pieces() {
   };
 
   const onDrop = (e) => {
+    e.preventDefault();
     const newPosition = copyPosition(currentPosition);
     const { x, y } = calculateCoords(e.clientX, e.clientY);
     const [p, rank, file] = e.dataTransfer.getData("text").split(",");
     if (appState.candidateMoves?.find((m) => m[0] === x && m[1] === y)) {
+      if (p.endsWith("p") && !newPosition[x][y] && x !== rank && y !== file) {
+        newPosition[rank][y] = "";
+      }
       newPosition[rank][file] = "";
       newPosition[x][y] = p;
       dispatch(makeNewMove({ newPosition }));
