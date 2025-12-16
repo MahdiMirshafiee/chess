@@ -5,6 +5,7 @@ import Ranks from "./bits/Ranks";
 import "./Board.css";
 import musicFile from "../../assets/Chess-music.mp3";
 import { useAppContext } from "../../contexts/Context";
+import Popup from "../popup/Popup";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
@@ -117,6 +118,7 @@ function Board() {
           )}
         </div>
         <Pieces />
+        <Popup theme={theme} />
         <Files files={files} theme={theme} />
       </div>
     </>
