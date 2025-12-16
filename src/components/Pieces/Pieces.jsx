@@ -4,6 +4,7 @@ import "./Pieces.css";
 import { copyPosition } from "../../helper/helper";
 import { useAppContext } from "../../contexts/Context";
 import { clearCandidates, makeNewMove } from "../../reducer/actions/move";
+import arbiter from "../../arbiter/arbiter";
 
 function Pieces() {
   const ref = useRef();
@@ -18,20 +19,26 @@ function Pieces() {
     return { x, y };
   };
 
-  const onDrop = (e) => {
-    e.preventDefault();
-    const newPosition = copyPosition(currentPosition);
+  const move = (e) => {
     const { x, y } = calculateCoords(e.clientX, e.clientY);
-    const [p, rank, file] = e.dataTransfer.getData("text").split(",");
+    const [piece, rank, file] = e.dataTransfer.getData("text").split(",");
     if (appState.candidateMoves?.find((m) => m[0] === x && m[1] === y)) {
-      if (p.endsWith("p") && !newPosition[x][y] && x !== rank && y !== file) {
-        newPosition[rank][y] = "";
-      }
-      newPosition[rank][file] = "";
-      newPosition[x][y] = p;
+      const newPosition = arbiter.performMove({
+        position: currentPosition,
+        piece,
+        rank,
+        file,
+        x,
+        y,
+      });
       dispatch(makeNewMove({ newPosition }));
     }
     dispatch(clearCandidates());
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    move(e);
   };
 
   const onDragOver = (e) => {
