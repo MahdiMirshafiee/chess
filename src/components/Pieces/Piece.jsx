@@ -5,7 +5,7 @@ import { generateCandidateMoves } from "../../reducer/actions/move";
 
 function Piece({ rank, file, piece, onTouchDrop }) {
   const { appState, dispatch } = useAppContext();
-  const { turn, position } = appState;
+  const { turn, position, castleDirection } = appState;
   const currentPosition = position[position.length - 1];
   const prevPosition = position[position.length - 2];
   const pieceRef = useRef(null);
@@ -16,6 +16,7 @@ function Piece({ rank, file, piece, onTouchDrop }) {
       const candidateMoves = arbiter.getValidMoves({
         position: currentPosition,
         prevPosition: prevPosition,
+        castleDirection: castleDirection[turn],
         piece,
         rank,
         file,

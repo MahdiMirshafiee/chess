@@ -5,6 +5,8 @@ import { useAppContext } from "../../contexts/Context";
 import { clearCandidates, makeNewMove } from "../../reducer/actions/move";
 import arbiter from "../../arbiter/arbiter";
 import { openPromotion } from "../../reducer/actions/popup";
+import { getCastleDirection } from "../../arbiter/getMoves";
+import { updateCastling } from "../../reducer/actions/game";
 
 function Pieces() {
   const ref = useRef();
@@ -23,6 +25,17 @@ function Pieces() {
     dispatch(openPromotion({ rank: Number(rank), file: Number(file), x, y }));
   };
 
+  const updateCastlingState = ({ piece, rank, file }) => {
+    const direction = getCastleDirection({
+      castleDirection: appState.castleDirection,
+      piece,
+      rank,
+      file,
+    });
+    if (direction) {
+      dispatch(updateCastling(direction));
+    }
+  };
   const move = (e) => {
     const { x, y } = calculateCoords(e.clientX, e.clientY);
     const [piece, rank, file] = e.dataTransfer.getData("text").split(",");
@@ -30,6 +43,9 @@ function Pieces() {
       if ((piece === "wp" && x === 7) || (piece === "bp" && x === 0)) {
         openPromotionBox({ rank, file, x, y });
         return;
+      }
+      if (piece.endsWith("r") || piece.endsWith("k")) {
+        updateCastlingState({ piece, rank, file });
       }
       const newPosition = arbiter.performMove({
         position: currentPosition,
@@ -56,6 +72,13 @@ function Pieces() {
   const onTouchDrop = (clientX, clientY, piece, rank, file) => {
     const { x, y } = calculateCoords(clientX, clientY);
     if (appState.candidateMoves?.find((m) => m[0] === x && m[1] === y)) {
+      if ((piece === "wp" && x === 7) || (piece === "bp" && x === 0)) {
+        openPromotionBox({ rank, file, x, y });
+        return;
+      }
+      if (piece.endsWith("r") || piece.endsWith("k")) {
+        updateCastlingState({ piece, rank, file });
+      }
       const newPosition = arbiter.performMove({
         position: currentPosition,
         piece,

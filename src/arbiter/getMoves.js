@@ -164,3 +164,81 @@ export const getPawnCapture = ({
   }
   return moves;
 };
+
+export const getCastlingMove = ({
+  position,
+  castleDirection,
+  piece,
+  rank,
+  file,
+}) => {
+  const moves = [];
+  if (file !== 4 || rank % 7 !== 0 || castleDirection === "none") {
+    return moves;
+  }
+  if (piece.startsWith("w")) {
+    if (
+      ["left", "both"].includes(castleDirection) &&
+      !position[0][3] &&
+      !position[0][2] &&
+      !position[0][1] &&
+      position[0][0] === "wr"
+    ) {
+      moves.push([0, 2]);
+    }
+    if (
+      ["right", "both"].includes(castleDirection) &&
+      !position[0][5] &&
+      !position[0][6] &&
+      position[0][7] === "wr"
+    ) {
+      moves.push([0, 6]);
+    }
+  } else {
+    if (
+      ["left", "both"].includes(castleDirection) &&
+      !position[7][3] &&
+      !position[7][2] &&
+      !position[7][1] &&
+      position[7][0] === "br"
+    ) {
+      moves.push([7, 2]);
+    }
+    if (
+      ["right", "both"].includes(castleDirection) &&
+      !position[7][5] &&
+      !position[7][6] &&
+      position[7][7] === "br"
+    ) {
+      moves.push([7, 6]);
+    }
+  }
+  return moves;
+};
+
+export const getCastleDirection = ({ castleDirection, piece, rank, file }) => {
+  rank = Number(rank);
+  file = Number(file);
+  const direction = castleDirection[piece[0]];
+  if (piece.endsWith("k")) return "none";
+
+  if (file === 0 && rank === 0) {
+    if (direction === "both") return "right";
+    if (direction === "left") return "none";
+  }
+
+  if (file === 7 && rank === 0) {
+    if (direction === "both") return "left";
+    if (direction === "right") return "none";
+  }
+
+  if (file === 0 && rank === 7) {
+    if (direction === "both") return "right";
+    if (direction === "left") return "none";
+  }
+
+  if (file === 7 && rank === 7) {
+    if (direction === "both") return "left";
+    if (direction === "right") return "none";
+  }
+};

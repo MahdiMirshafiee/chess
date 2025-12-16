@@ -6,6 +6,7 @@ import {
   getPawnMoves,
   getQueenMoves,
   getRookMoves,
+  getCastlingMove,
 } from "./getMoves";
 import { movePawn, movePiece } from "./move";
 
@@ -23,7 +24,14 @@ const arbiter = {
     if (piece.endsWith("p"))
       return getPawnMoves({ position, piece, rank, file });
   },
-  getValidMoves: function ({ position, prevPosition, piece, rank, file }) {
+  getValidMoves: function ({
+    position,
+    prevPosition,
+    castleDirection,
+    piece,
+    rank,
+    file,
+  }) {
     let moves = this.getRegularMoves({
       position,
       piece,
@@ -36,17 +44,21 @@ const arbiter = {
         ...getPawnCapture({ position, prevPosition, piece, rank, file }),
       ];
     }
+    if (piece.endsWith("k")) {
+      moves = [
+        ...moves,
+        ...getCastlingMove({ position, castleDirection, piece, rank, file }),
+      ];
+    }
     return moves;
   },
-  performMove : function({ position, piece, rank, file,x,y }){
-    if(piece.endsWith('p')){
-      return movePawn({ position, piece, rank, file,x,y })
+  performMove: function ({ position, piece, rank, file, x, y }) {
+    if (piece.endsWith("p")) {
+      return movePawn({ position, piece, rank, file, x, y });
+    } else {
+      return movePiece({ position, piece, rank, file, x, y });
     }
-    else {
-      return movePiece({ position, piece, rank, file,x,y })
-
-    }
-  }
+  },
 };
 
 export default arbiter;
