@@ -10,7 +10,7 @@
 .tiles {
   display: grid;
   grid-template-columns: repeat(8, var(--tile-size));
-  grid-template-rows: repeat(8, var (--tile-size));
+  grid-template-rows: repeat(8, var(--tile-size));
   height: calc(8 * var(--tile-size));
 }
 
@@ -128,8 +128,8 @@
 }
 
 .controls {
-  margin-left: 450px;
-  margin-top: 30px;
+  margin-left: 480px;
+  margin-top: 60px;
   position: fixed;
   display: flex;
   align-items: center;
