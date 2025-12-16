@@ -6,6 +6,8 @@ import "./Board.css";
 import musicFile from "../../assets/Chess-music.mp3";
 import { useAppContext } from "../../contexts/Context";
 import Popup from "../popup/Popup";
+import arbiter from "../../arbiter/arbiter";
+import { getKingPosition } from "../../arbiter/getMoves";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
@@ -13,6 +15,16 @@ function Board() {
   const [playing, setPlaying] = useState(false);
   const { appState } = useAppContext();
   const position = appState.position[appState.position.length - 1];
+
+  const isChecked = (() => {
+    const isInCheck = arbiter.isPlayerInCheck({
+      positionAfterMove: position,
+      player: appState.turn,
+    });
+    if (isInCheck) return getKingPosition(position, appState.turn);
+
+    return null;
+  })();
 
   useEffect(() => {
     document.cookie.split("=")[1] === theme
@@ -49,6 +61,8 @@ function Board() {
       if (position[i][j]) c += ` attacking`;
       else c += ` highlight`;
     }
+
+    if (isChecked && isChecked[0] === i && isChecked[1] === j) c += " checked";
     return c;
   };
 

@@ -200,3 +200,15 @@
     margin-top: 10px;
   }
 }
+
+.checked:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: var(--tile-size);
+  height: var(--tile-size);
+  background: var(--check);
+  border-radius: 20%;
+  left: 0;
+  top: 0;
+}

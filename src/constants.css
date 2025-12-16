@@ -6,6 +6,7 @@
   --dark-tile-d: #80a1b5;
   --bg-color: #202020;
   --highlight: rgba(0, 0, 0, 0.1);
+  --check: #feec48;
 }
 
 @media all and (max-width: 900px) {
