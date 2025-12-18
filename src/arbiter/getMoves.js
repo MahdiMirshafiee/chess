@@ -45,7 +45,6 @@ export const getKnightMoves = ({ position, rank, file }) => {
       moves.push([rank + c[0], file + c[1]]);
     }
   });
-  console.log(moves);
   return moves;
 };
 
@@ -179,7 +178,13 @@ export const getCastlingMove = ({
     return moves;
   }
   if (piece.startsWith("w")) {
-    if (arbiter.isPlayerInCheck({ positionAfterMove: position, position, player: "w" }))
+    if (
+      arbiter.isPlayerInCheck({
+        positionAfterMove: position,
+        position,
+        player: "w",
+      })
+    )
       return moves;
     if (
       ["left", "both"].includes(castleDirection) &&
@@ -247,7 +252,13 @@ export const getCastlingMove = ({
       moves.push([0, 6]);
     }
   } else {
-    if (arbiter.isPlayerInCheck({ positionAfterMove: position, position, player: "b" }))
+    if (
+      arbiter.isPlayerInCheck({
+        positionAfterMove: position,
+        position,
+        player: "b",
+      })
+    )
       return moves;
     if (
       ["left", "both"].includes(castleDirection) &&

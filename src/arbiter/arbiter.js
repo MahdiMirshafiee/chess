@@ -104,6 +104,28 @@ const arbiter = {
     }
     return false;
   },
+
+  isStalemate: function ({ position, player, castleDirection }) {
+    const isInCheck = this.isPlayerInCheck({
+      positionAfterMove: position,
+      position,
+      player,
+    });
+    if (isInCheck) return;
+
+    const pieces = getPieces(position, player);
+    const moves = pieces.reduce((acc, p) => {
+      return [
+        ...acc,
+        ...this.getValidMoves({
+          position,
+          castleDirection,
+          ...p,
+        }),
+      ];
+    }, []);
+    return !isInCheck && moves.length === 0;
+  },
 };
 
 export default arbiter;

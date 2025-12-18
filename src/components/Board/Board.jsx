@@ -8,6 +8,8 @@ import { useAppContext } from "../../contexts/Context";
 import Popup from "../popup/Popup";
 import arbiter from "../../arbiter/arbiter";
 import { getKingPosition } from "../../arbiter/getMoves";
+import PromotionBox from "../popup/PromotionBox copy/PromotionBox";
+import GameEnds from "../popup/GameEnds/GameEnds";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
@@ -132,7 +134,10 @@ function Board() {
           )}
         </div>
         <Pieces />
-        <Popup theme={theme} />
+        <Popup theme={theme}>
+          <PromotionBox />
+          <GameEnds />
+        </Popup>
         <Files files={files} theme={theme} />
       </div>
     </>

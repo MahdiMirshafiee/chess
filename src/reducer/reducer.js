@@ -50,6 +50,20 @@ export const reducer = (state, action) => {
         castleDirection,
       };
     }
+
+    case actionTypes.STALEMATE: {
+      return {
+        ...state,
+        status: Status.stalemate,
+      };
+    }
+
+    case actionTypes.NEW_GAME: {
+      return {
+        ...action.payloal,
+      };
+    }
+
     default:
       return state;
   }

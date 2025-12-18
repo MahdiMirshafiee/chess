@@ -1,10 +1,10 @@
+import React from "react";
 import { Status } from "../../constant";
 import { useAppContext } from "../../contexts/Context";
 import { closePopup } from "../../reducer/actions/popup";
 import "./Popup.css";
-import PromotionBox from "./PromotionBox/PromotionBox";
 
-function Popup({ theme }) {
+function Popup({ theme, children }) {
   const { appState, dispatch } = useAppContext();
   if (appState.status === Status.ongoing) return null;
 
@@ -14,7 +14,9 @@ function Popup({ theme }) {
 
   return (
     <div className="popup">
-      <PromotionBox theme={theme} onClosePopup={onClosePopup} />
+      {React.Children.toArray(children).map((child) =>
+        React.cloneElement(child, { onClosePopup, theme })
+      )}
     </div>
   );
 }

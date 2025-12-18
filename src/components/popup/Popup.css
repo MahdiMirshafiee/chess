@@ -23,3 +23,39 @@
   border: 8px solid var(--dark-tile-d);
   box-shadow: 0 0 0 8px var(--light-tile-d);
 }
+
+.popup-inner__center {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding: 1em 0;
+}
+
+.popup-inner__center h1 {
+  font-size: 2.5rem;
+  margin: 0 0 0.5em 0;
+}
+
+.popup-inner__center p {
+  font-size: 1.2rem;
+  margin: 0 0 1em 0;
+}
+
+.popup-inner__center {
+  border: 0 none;
+  padding: 10px 30px;
+  margin: 10px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.popup-inner__center.light button {
+  background: var(--dark-tile);
+  color: var(--light-tile);
+}
+
+.popup-inner__center.dark button {
+  background: var(--light-tile-d);
+  color: var(--dark-tile-d);
+}
