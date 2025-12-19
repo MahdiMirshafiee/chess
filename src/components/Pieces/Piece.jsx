@@ -79,20 +79,20 @@ function Piece({ rank, file, piece, onTouchDrop, selectedPiece, setSelectedPiece
     onTouchDrop(touch.clientX, touch.clientY, piece, rank, file);
   };
 
-  const onClick = (e) => {
+  const handlePieceClick = (e) => {
     e.stopPropagation();
-    
+
     if (selectedPiece && appState.candidateMoves?.find((m) => m[0] === rank && m[1] === file)) {
       const selectedPieceData = currentPosition[selectedPiece.rank][selectedPiece.file];
       const selectedRank = selectedPiece.rank;
       const selectedFile = selectedPiece.file;
-      
+
       if ((selectedPieceData === "wp" && rank === 7) || (selectedPieceData === "bp" && rank === 0)) {
         dispatch(openPromotion({ rank: Number(selectedRank), file: Number(selectedFile), x: rank, y: file }));
         setSelectedPiece(null);
         return;
       }
-      
+
       const newPosition = arbiter.performMove({
         position: currentPosition,
         piece: selectedPieceData,
@@ -101,13 +101,13 @@ function Piece({ rank, file, piece, onTouchDrop, selectedPiece, setSelectedPiece
         x: rank,
         y: file,
       });
-      
+
       dispatch(makeNewMove({ newPosition }));
       dispatch(clearCandidates());
       setSelectedPiece(null);
       return;
     }
-    
+
     if (turn === piece[0]) {
       if (selectedPiece && selectedPiece.rank === rank && selectedPiece.file === file) {
         setSelectedPiece(null);
@@ -129,7 +129,7 @@ function Piece({ rank, file, piece, onTouchDrop, selectedPiece, setSelectedPiece
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      onClick={onClick}
+      onClick={handlePieceClick}
     />
   );
 }

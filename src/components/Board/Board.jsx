@@ -80,14 +80,14 @@ function Board() {
     return c;
   };
 
-  const handleTileClick = (x, y) => {
-    if (selectedPiece && appState.candidateMoves?.find((m) => m[0] === x && m[1] === y)) {
+  const movePieceByClick = (targetX, targetY) => {
+    if (selectedPiece && appState.candidateMoves?.find((m) => m[0] === targetX && m[1] === targetY)) {
       const piece = position[selectedPiece.rank][selectedPiece.file];
       const rank = selectedPiece.rank;
       const file = selectedPiece.file;
 
-      if ((piece === "wp" && x === 7) || (piece === "bp" && x === 0)) {
-        dispatch(openPromotion({ rank: Number(rank), file: Number(file), x, y }));
+      if ((piece === "wp" && targetX === 7) || (piece === "bp" && targetX === 0)) {
+        dispatch(openPromotion({ rank: Number(rank), file: Number(file), x: targetX, y: targetY }));
         setSelectedPiece(null);
         return;
       }
@@ -97,8 +97,8 @@ function Board() {
         piece,
         rank,
         file,
-        x,
-        y,
+        x: targetX,
+        y: targetY,
       });
 
       dispatch(makeNewMove({ newPosition }));
@@ -190,7 +190,7 @@ function Board() {
                         gridColumn: j + 1,
                         gridRow: i + 1,
                       }}
-                      onClick={() => handleTileClick(x, y)}
+                      onClick={() => movePieceByClick(x, y)}
                     ></div>
                   );
                 }
