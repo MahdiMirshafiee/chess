@@ -13,7 +13,11 @@
   position: absolute;
   background-size: 100%;
   pointer-events: auto;
-  cursor: pointer;
+  cursor: grab;
+}
+
+.piece:active {
+  cursor: grabbing;
 }
 
 .piece.bk {
