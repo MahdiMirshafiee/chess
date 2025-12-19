@@ -4,6 +4,7 @@
   right: 0;
   top: 0;
   bottom: calc(0.25 * var(--tile-size));
+  z-index: 3;
 }
 
 .piece {
@@ -11,6 +12,8 @@
   height: 12.5%;
   position: absolute;
   background-size: 100%;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .piece.bk {
@@ -268,3 +271,5 @@
     right: 0;
   }
 }
+
+

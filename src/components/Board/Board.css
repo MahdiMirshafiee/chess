@@ -216,3 +216,33 @@
 .mate:after {
   background: var(--mate);
 }
+
+.tile.highlight,
+.tile.attacking {
+  cursor: pointer;
+}
+
+.tile.highlight:after,
+.tile.attacking:after {
+  pointer-events: none;
+}
+
+.click-layer {
+  position: absolute;
+  left: calc(0.25 * var(--tile-size));
+  right: 0;
+  top: 0;
+  bottom: calc(0.25 * var(--tile-size));
+  display: grid;
+  grid-template-columns: repeat(8, var(--tile-size));
+  grid-template-rows: repeat(8, var(--tile-size));
+  pointer-events: none;
+  z-index: 5;
+}
+
+.click-tile {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+

@@ -11,12 +11,15 @@ import { getKingPosition } from "../../arbiter/getMoves";
 import PromotionBox from "../popup/PromotionBox copy/PromotionBox";
 import GameEnds from "../popup/GameEnds/GameEnds";
 import { Status } from "../../constant";
+import { makeNewMove, clearCandidates } from "../../reducer/actions/move";
+import { openPromotion } from "../../reducer/actions/popup";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
-  const { appState } = useAppContext();
+  const [selectedPiece, setSelectedPiece] = useState(null);
+  const { appState, dispatch } = useAppContext();
   const position = appState.position[appState.position.length - 1];
 
   const isChecked = (() => {
@@ -75,6 +78,33 @@ function Board() {
     if (isMate && isMate[0] === i && isMate[1] === j) c += " mate";
 
     return c;
+  };
+
+  const handleTileClick = (x, y) => {
+    if (selectedPiece && appState.candidateMoves?.find((m) => m[0] === x && m[1] === y)) {
+      const piece = position[selectedPiece.rank][selectedPiece.file];
+      const rank = selectedPiece.rank;
+      const file = selectedPiece.file;
+
+      if ((piece === "wp" && x === 7) || (piece === "bp" && x === 0)) {
+        dispatch(openPromotion({ rank: Number(rank), file: Number(file), x, y }));
+        setSelectedPiece(null);
+        return;
+      }
+
+      const newPosition = arbiter.performMove({
+        position,
+        piece,
+        rank,
+        file,
+        x,
+        y,
+      });
+
+      dispatch(makeNewMove({ newPosition }));
+      dispatch(clearCandidates());
+      setSelectedPiece(null);
+    }
   };
 
   return (
@@ -142,7 +172,33 @@ function Board() {
             ))
           )}
         </div>
-        <Pieces />
+        <Pieces selectedPiece={selectedPiece} setSelectedPiece={setSelectedPiece} />
+        {selectedPiece && (
+          <div className="click-layer">
+            {ranks.map((rank, i) =>
+              files.map((file, j) => {
+                const x = 7 - i;
+                const y = j;
+                const isCandidate = appState.candidateMoves?.find((m) => m[0] === x && m[1] === y);
+                const isEmpty = !position[x][y];
+                if (isCandidate && isEmpty) {
+                  return (
+                    <div
+                      key={`click-${file}-${rank}`}
+                      className="click-tile"
+                      style={{
+                        gridColumn: j + 1,
+                        gridRow: i + 1,
+                      }}
+                      onClick={() => handleTileClick(x, y)}
+                    ></div>
+                  );
+                }
+                return null;
+              })
+            )}
+          </div>
+        )}
         <Popup theme={theme}>
           <PromotionBox />
           <GameEnds />

@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import arbiter from "../../arbiter/arbiter";
 import { useAppContext } from "../../contexts/Context";
-import { generateCandidateMoves } from "../../reducer/actions/move";
+import { generateCandidateMoves, makeNewMove, clearCandidates } from "../../reducer/actions/move";
+import { openPromotion } from "../../reducer/actions/popup";
 
-function Piece({ rank, file, piece, onTouchDrop }) {
+function Piece({ rank, file, piece, onTouchDrop, selectedPiece, setSelectedPiece }) {
   const { appState, dispatch } = useAppContext();
   const { turn, position, castleDirection } = appState;
   const currentPosition = position[position.length - 1];
@@ -31,6 +32,7 @@ function Piece({ rank, file, piece, onTouchDrop }) {
     setTimeout(() => {
       e.target.style.display = "none";
     }, 0);
+    setSelectedPiece(null);
     generateMoves();
   };
 
@@ -77,8 +79,44 @@ function Piece({ rank, file, piece, onTouchDrop }) {
     onTouchDrop(touch.clientX, touch.clientY, piece, rank, file);
   };
 
-  const onClick = () => {
-    generateMoves();
+  const onClick = (e) => {
+    e.stopPropagation();
+    
+    if (selectedPiece && appState.candidateMoves?.find((m) => m[0] === rank && m[1] === file)) {
+      const selectedPieceData = currentPosition[selectedPiece.rank][selectedPiece.file];
+      const selectedRank = selectedPiece.rank;
+      const selectedFile = selectedPiece.file;
+      
+      if ((selectedPieceData === "wp" && rank === 7) || (selectedPieceData === "bp" && rank === 0)) {
+        dispatch(openPromotion({ rank: Number(selectedRank), file: Number(selectedFile), x: rank, y: file }));
+        setSelectedPiece(null);
+        return;
+      }
+      
+      const newPosition = arbiter.performMove({
+        position: currentPosition,
+        piece: selectedPieceData,
+        rank: selectedRank,
+        file: selectedFile,
+        x: rank,
+        y: file,
+      });
+      
+      dispatch(makeNewMove({ newPosition }));
+      dispatch(clearCandidates());
+      setSelectedPiece(null);
+      return;
+    }
+    
+    if (turn === piece[0]) {
+      if (selectedPiece && selectedPiece.rank === rank && selectedPiece.file === file) {
+        setSelectedPiece(null);
+        dispatch(clearCandidates());
+      } else {
+        setSelectedPiece({ rank, file });
+        generateMoves();
+      }
+    }
   };
 
   return (

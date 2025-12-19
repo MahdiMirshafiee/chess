@@ -13,7 +13,7 @@ import {
   updateCastling,
 } from "../../reducer/actions/game";
 
-function Pieces() {
+function Pieces({ selectedPiece, setSelectedPiece }) {
   const ref = useRef();
   const { appState, dispatch } = useAppContext();
   const currentPosition = appState.position[appState.position.length - 1];
@@ -85,6 +85,7 @@ function Pieces() {
         dispatch(detectCheckMate(piece[0]));
     }
     dispatch(clearCandidates());
+    setSelectedPiece(null);
   };
 
   const onDrop = (e) => {
@@ -139,6 +140,7 @@ function Pieces() {
         dispatch(detectCheckMate(piece[0]));
     }
     dispatch(clearCandidates());
+    setSelectedPiece(null);
   };
 
   return (
@@ -152,6 +154,8 @@ function Pieces() {
               file={file}
               piece={currentPosition[rank][file]}
               onTouchDrop={onTouchDrop}
+              selectedPiece={selectedPiece}
+              setSelectedPiece={setSelectedPiece}
             />
           ) : null
         )
