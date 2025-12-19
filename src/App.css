@@ -29,12 +29,13 @@ body {
     place-content: center;
     place-items: center;
     padding: 10px;
-    overflow-y: auto;
+    overflow: hidden;
+    height: 100vh;
   }
 
   html,
   body {
-    overflow: auto;
-    position: relative;
+    overflow: hidden;
+    position: fixed;
   }
 }
