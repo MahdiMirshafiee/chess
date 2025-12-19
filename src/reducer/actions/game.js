@@ -14,9 +14,15 @@ export const detectStalemate = () => {
   };
 };
 
+export const detectInSufficientMaterial = () => {
+  return {
+    type: actionTypes.INSUFFICIENT_MATERIAL,
+  };
+};
+
 export const setupNewGame = () => {
   return {
     type: actionTypes.NEW_GAME,
-    payload: initGameState
+    payload: initGameState,
   };
 };
