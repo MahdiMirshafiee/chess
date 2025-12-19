@@ -4,6 +4,7 @@
   right: 0;
   top: 0;
   bottom: calc(0.25 * var(--tile-size));
+  z-index: 100;
 }
 
 .popup-inner {

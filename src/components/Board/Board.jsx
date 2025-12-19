@@ -13,6 +13,7 @@ import GameEnds from "../popup/GameEnds/GameEnds";
 import { Status } from "../../constant";
 import { makeNewMove, clearCandidates } from "../../reducer/actions/move";
 import { openPromotion } from "../../reducer/actions/popup";
+import { detectCheckMate, detectInSufficientMaterial, detectStalemate } from "../../reducer/actions/game";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
@@ -101,7 +102,19 @@ function Board() {
         y: targetY,
       });
 
+      const opponent = piece.startsWith("b") ? "w" : "b";
+      const opponentCastleDirection = appState.castleDirection[opponent];
+
       dispatch(makeNewMove({ newPosition }));
+
+      if (arbiter.insufficientMatrial(newPosition)) {
+        dispatch(detectInSufficientMaterial());
+      } else if (arbiter.isStalemate({ position: newPosition, player: opponent, castleDirection: opponentCastleDirection })) {
+        dispatch(detectStalemate());
+      } else if (arbiter.isCheckMate({ position: newPosition, player: opponent, castleDirection: opponentCastleDirection })) {
+        dispatch(detectCheckMate(piece[0]));
+      }
+
       dispatch(clearCandidates());
       setSelectedPiece(null);
     }

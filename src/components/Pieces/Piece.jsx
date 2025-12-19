@@ -3,6 +3,7 @@ import arbiter from "../../arbiter/arbiter";
 import { useAppContext } from "../../contexts/Context";
 import { generateCandidateMoves, makeNewMove, clearCandidates } from "../../reducer/actions/move";
 import { openPromotion } from "../../reducer/actions/popup";
+import { detectCheckMate, detectInSufficientMaterial, detectStalemate } from "../../reducer/actions/game";
 
 function Piece({ rank, file, piece, onTouchDrop, selectedPiece, setSelectedPiece }) {
   const { appState, dispatch } = useAppContext();
@@ -102,7 +103,19 @@ function Piece({ rank, file, piece, onTouchDrop, selectedPiece, setSelectedPiece
         y: file,
       });
 
+      const opponent = selectedPieceData.startsWith("b") ? "w" : "b";
+      const opponentCastleDirection = castleDirection[opponent];
+
       dispatch(makeNewMove({ newPosition }));
+
+      if (arbiter.insufficientMatrial(newPosition)) {
+        dispatch(detectInSufficientMaterial());
+      } else if (arbiter.isStalemate({ position: newPosition, player: opponent, castleDirection: opponentCastleDirection })) {
+        dispatch(detectStalemate());
+      } else if (arbiter.isCheckMate({ position: newPosition, player: opponent, castleDirection: opponentCastleDirection })) {
+        dispatch(detectCheckMate(selectedPieceData[0]));
+      }
+
       dispatch(clearCandidates());
       setSelectedPiece(null);
       return;
