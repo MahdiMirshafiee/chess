@@ -8,5 +8,6 @@ const actionTypes = {
   NEW_GAME: "NEW_GAME",
   PROMOTION_CLOSE: "PROMOTION_CLOSE",
   INSUFFICIENT_MATERIAL: "INSUFFICIENT_MATERIAL",
+  WIN:"WIN"
 };
 export default actionTypes;

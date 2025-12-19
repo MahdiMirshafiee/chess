@@ -1,43 +1,20 @@
-.promotion-choices {
-  height: 12.5%;
+.wins {
+  height: var(--tile-size);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.promotion-choices .piece {
-  width: 25%;
-  height: 100%;
-  border: 1px solid var(--dark-tile);
+.wins.White {
+  background-image: url(../../../assets/wk.png);
 }
-
-.promotion-choices .piece:hover {
-  box-shadow: 0 0 0 5px var(--dark-tile) inset;
-  transform: scale(1.05);
+.wins.Black {
+  background-image: url(../../../assets/bk.png);
 }
-
-.promotion-choices.light .piece {
-  border: 1px solid var(--dark-tile);
-}
-
-.promotion-choices.dark .piece {
-  border: 1px solid var(--light-tile-d);
-}
-
-.promotion-choices.light .piece:hover {
-  box-shadow: 0 0 0 5px var(--dark-tile) inset;
-}
-
-.promotion-choices.dark .piece:hover {
-  box-shadow: 0 0 0 5px var(--light-tile-d) inset;
-}
-
-.promotion-choices :is(.wq, .bq) {
-  left: 0;
-}
-.promotion-choices :is(.wr, .br) {
-  left: 25%;
-}
-.promotion-choices :is(.wb, .bb) {
-  left: 50%;
-}
-.promotion-choices :is(.wn, .bn) {
-  left: 75%;
+.draws {
+  height: var(--tile-size);
+  background-size: contain;
+  background-repeat: no-repeat, no-repeat;
+  background-position: 35% center, 65% center;
+  background-image: url(../../../assets/wk.png), url(../../../assets/bk.png);
 }

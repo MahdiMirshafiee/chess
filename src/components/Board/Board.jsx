@@ -10,6 +10,7 @@ import arbiter from "../../arbiter/arbiter";
 import { getKingPosition } from "../../arbiter/getMoves";
 import PromotionBox from "../popup/PromotionBox copy/PromotionBox";
 import GameEnds from "../popup/GameEnds/GameEnds";
+import { Status } from "../../constant";
 
 function Board() {
   const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
@@ -27,6 +28,11 @@ function Board() {
 
     return null;
   })();
+
+  const isMate =
+    appState.status === Status.white || appState.status === Status.black
+      ? getKingPosition(position, appState.status === Status.white ? "b" : "w")
+      : null;
 
   useEffect(() => {
     document.cookie.split("=")[1] === theme
@@ -65,6 +71,9 @@ function Board() {
     }
 
     if (isChecked && isChecked[0] === i && isChecked[1] === j) c += " checked";
+
+    if (isMate && isMate[0] === i && isMate[1] === j) c += " mate";
+
     return c;
   };
 

@@ -6,7 +6,12 @@ import { clearCandidates, makeNewMove } from "../../reducer/actions/move";
 import arbiter from "../../arbiter/arbiter";
 import { openPromotion } from "../../reducer/actions/popup";
 import { getCastleDirection } from "../../arbiter/getMoves";
-import { detectInSufficientMaterial, detectStalemate, updateCastling } from "../../reducer/actions/game";
+import {
+  detectCheckMate,
+  detectInSufficientMaterial,
+  detectStalemate,
+  updateCastling,
+} from "../../reducer/actions/game";
 
 function Pieces() {
   const ref = useRef();
@@ -70,6 +75,14 @@ function Pieces() {
         })
       )
         dispatch(detectStalemate());
+      else if (
+        arbiter.isCheckMate({
+          position: newPosition,
+          player: opponent,
+          castleDirection,
+        })
+      )
+        dispatch(detectCheckMate(piece[0]));
     }
     dispatch(clearCandidates());
   };
@@ -86,6 +99,9 @@ function Pieces() {
   const onTouchDrop = (clientX, clientY, piece, rank, file) => {
     const { x, y } = calculateCoords(clientX, clientY);
     if (appState.candidateMoves?.find((m) => m[0] === x && m[1] === y)) {
+      const opponent = piece.startsWith("b") ? "w" : "b";
+      const castleDirection =
+        appState.castleDirection[`${piece.startsWith("b") ? "w" : "b"}`];
       if ((piece === "wp" && x === 7) || (piece === "bp" && x === 0)) {
         openPromotionBox({ rank, file, x, y });
         return;
@@ -102,6 +118,25 @@ function Pieces() {
         y,
       });
       dispatch(makeNewMove({ newPosition }));
+
+      if (arbiter.insufficientMatrial(newPosition))
+        dispatch(detectInSufficientMaterial());
+      else if (
+        arbiter.isStalemate({
+          position: newPosition,
+          player: opponent,
+          castleDirection,
+        })
+      )
+        dispatch(detectStalemate());
+      else if (
+        arbiter.isCheckMate({
+          position: newPosition,
+          player: opponent,
+          castleDirection,
+        })
+      )
+        dispatch(detectCheckMate(piece[0]));
     }
     dispatch(clearCandidates());
   };
