@@ -1,5 +1,5 @@
 import { useAppContext } from "../../../contexts/Context";
-import { copyPosition } from "../../../helper/helper";
+import { copyPosition, getNewMoveNotation } from "../../../helper/helper";
 import { clearCandidates, makeNewMove } from "../../../reducer/actions/move";
 import "./PromotionBox.css";
 
@@ -24,15 +24,23 @@ function PromotionBox({ theme, onClosePopup }) {
     return style;
   };
 
-  const onClick = (option) => {
+  const handlePromotion = (option) => {
     onClosePopup();
-    const newPosition = copyPosition(
-      appState.position[appState.position.length - 1]
-    );
+    const currentPosition = appState.position[appState.position.length - 1];
+    const newPosition = copyPosition(currentPosition);
     newPosition[promotionSquare.rank][promotionSquare.file] = "";
     newPosition[promotionSquare.x][promotionSquare.y] = color + option;
+
     dispatch(clearCandidates());
-    dispatch(makeNewMove({ newPosition }));
+
+    const newMove = getNewMoveNotation({
+      ...promotionSquare,
+      piece: color + "p",
+      promotesTo: option,
+      position: appState.position[appState.position.length - 1],
+    });
+
+    dispatch(makeNewMove({ newPosition, newMove }));
   };
 
   return (
@@ -46,9 +54,7 @@ function PromotionBox({ theme, onClosePopup }) {
         <div
           key={option}
           className={`piece ${color}${option}`}
-          onClick={() => {
-            onClick(option);
-          }}
+          onClick={() => handlePromotion(option)}
         ></div>
       ))}
     </div>

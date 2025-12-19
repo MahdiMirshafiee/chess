@@ -13,6 +13,7 @@ export const initGameState = {
   position: [createPosition()],
   turn: "w",
   candidateMoves: [],
+  movesList: [],
   status: Status.ongoing,
   promotionSquare: null,
   castleDirection: {

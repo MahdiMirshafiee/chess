@@ -1,0 +1,17 @@
+button {
+  border: 0 none;
+  padding: 10px 30px;
+  margin: 10px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.dark {
+  background-color: var(--dark-tile-d);
+  color: var(--light-tile-d);
+}
+
+.light {
+  background-color: var(--dark-tile);
+  color: var(--light-tile);
+}

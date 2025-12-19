@@ -13,10 +13,14 @@ import GameEnds from "../popup/GameEnds/GameEnds";
 import { Status } from "../../constant";
 import { makeNewMove, clearCandidates } from "../../reducer/actions/move";
 import { openPromotion } from "../../reducer/actions/popup";
-import { detectCheckMate, detectInSufficientMaterial, detectStalemate } from "../../reducer/actions/game";
+import {
+  detectCheckMate,
+  detectInSufficientMaterial,
+  detectStalemate,
+} from "../../reducer/actions/game";
+import { getNewMoveNotation } from "../../helper/helper";
 
-function Board() {
-  const [theme, setTheme] = useState(document.cookie.split("=")[1] || "light");
+function Board({theme,setTheme}) {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [selectedPiece, setSelectedPiece] = useState(null);
@@ -82,13 +86,26 @@ function Board() {
   };
 
   const movePieceByClick = (targetX, targetY) => {
-    if (selectedPiece && appState.candidateMoves?.find((m) => m[0] === targetX && m[1] === targetY)) {
+    if (
+      selectedPiece &&
+      appState.candidateMoves?.find((m) => m[0] === targetX && m[1] === targetY)
+    ) {
       const piece = position[selectedPiece.rank][selectedPiece.file];
       const rank = selectedPiece.rank;
       const file = selectedPiece.file;
 
-      if ((piece === "wp" && targetX === 7) || (piece === "bp" && targetX === 0)) {
-        dispatch(openPromotion({ rank: Number(rank), file: Number(file), x: targetX, y: targetY }));
+      if (
+        (piece === "wp" && targetX === 7) ||
+        (piece === "bp" && targetX === 0)
+      ) {
+        dispatch(
+          openPromotion({
+            rank: Number(rank),
+            file: Number(file),
+            x: targetX,
+            y: targetY,
+          })
+        );
         setSelectedPiece(null);
         return;
       }
@@ -102,16 +119,37 @@ function Board() {
         y: targetY,
       });
 
+      const newMove = getNewMoveNotation({
+        piece,
+        rank,
+        file,
+        x: targetX,
+        y: targetY,
+        position,
+      });
+
       const opponent = piece.startsWith("b") ? "w" : "b";
       const opponentCastleDirection = appState.castleDirection[opponent];
 
-      dispatch(makeNewMove({ newPosition }));
+      dispatch(makeNewMove({ newPosition, newMove }));
 
       if (arbiter.insufficientMatrial(newPosition)) {
         dispatch(detectInSufficientMaterial());
-      } else if (arbiter.isStalemate({ position: newPosition, player: opponent, castleDirection: opponentCastleDirection })) {
+      } else if (
+        arbiter.isStalemate({
+          position: newPosition,
+          player: opponent,
+          castleDirection: opponentCastleDirection,
+        })
+      ) {
         dispatch(detectStalemate());
-      } else if (arbiter.isCheckMate({ position: newPosition, player: opponent, castleDirection: opponentCastleDirection })) {
+      } else if (
+        arbiter.isCheckMate({
+          position: newPosition,
+          player: opponent,
+          castleDirection: opponentCastleDirection,
+        })
+      ) {
         dispatch(detectCheckMate(piece[0]));
       }
 
@@ -185,14 +223,19 @@ function Board() {
             ))
           )}
         </div>
-        <Pieces selectedPiece={selectedPiece} setSelectedPiece={setSelectedPiece} />
+        <Pieces
+          selectedPiece={selectedPiece}
+          setSelectedPiece={setSelectedPiece}
+        />
         {selectedPiece && (
           <div className="click-layer">
             {ranks.map((rank, i) =>
               files.map((file, j) => {
                 const x = 7 - i;
                 const y = j;
-                const isCandidate = appState.candidateMoves?.find((m) => m[0] === x && m[1] === y);
+                const isCandidate = appState.candidateMoves?.find(
+                  (m) => m[0] === x && m[1] === y
+                );
                 const isEmpty = !position[x][y];
                 if (isCandidate && isEmpty) {
                   return (
