@@ -34,3 +34,20 @@
   left: 0;
   opacity: 0.5;
 }
+
+@media all and (max-width: 1023px) {
+  .moves-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-height: 60px;
+    padding: 10px 0;
+  }
+
+  .moves-list div {
+    flex-basis: auto;
+    padding-left: 25px;
+    padding-right: 10px;
+    white-space: nowrap;
+    top: 0;
+  }
+}

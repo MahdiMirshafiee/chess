@@ -15,3 +15,11 @@ button {
   background-color: var(--dark-tile);
   color: var(--light-tile);
 }
+
+@media all and (max-width: 1023px) {
+  button {
+    width: 100%;
+    padding: 12px;
+    margin: 5px;
+  }
+}

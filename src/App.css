@@ -21,3 +21,20 @@ body {
   font-family: "Sofia Sans", sans-serif;
   grid-template-columns: auto 220px;
 }
+
+@media all and (max-width: 1023px) {
+  .App {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    place-content: center;
+    place-items: center;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  html,
+  body {
+    overflow: auto;
+    position: relative;
+  }
+}

@@ -180,7 +180,7 @@
   border: 6px solid var(--highlight);
 }
 
-@media all and (max-width: 1100px) {
+@media all and (max-width: 1023px) {
   .controls {
     position: relative;
     margin-left: auto;

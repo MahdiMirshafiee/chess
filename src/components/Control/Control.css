@@ -5,3 +5,11 @@
   text-align: center;
   height: calc(8 * var(--tile-size));
 }
+
+@media all and (max-width: 1023px) {
+  .control {
+    height: auto;
+    width: calc(8 * var(--tile-size));
+    margin: 0 auto;
+  }
+}

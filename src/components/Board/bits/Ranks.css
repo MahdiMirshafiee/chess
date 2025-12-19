@@ -1,15 +1,22 @@
-.ranks{
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-around;
-color: var(--dark-tile);
+.ranks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--dark-tile);
 }
 
 .ranks-dark {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    color: var(--dark-tile-d);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--dark-tile-d);
+}
+
+@media all and (max-width: 767px) {
+  .ranks,
+  .ranks-dark {
+    margin-right: 5px;
   }
+}
