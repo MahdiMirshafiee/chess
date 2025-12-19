@@ -88,7 +88,7 @@ function Piece({
     const dx = Math.abs(touch.clientX - touchStartPos.current.x);
     const dy = Math.abs(touch.clientY - touchStartPos.current.y);
 
-    if (!isTouchDrag.current && (dx > 10 || dy > 10)) {
+    if (!isTouchDrag.current && (dx > 25 || dy > 25)) {
       clearTimeout(touchTimeout.current);
       startDrag(touch);
     }
