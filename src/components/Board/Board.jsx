@@ -247,6 +247,10 @@ function Board({theme,setTheme}) {
                         gridRow: i + 1,
                       }}
                       onClick={() => movePieceByClick(x, y)}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        movePieceByClick(x, y);
+                      }}
                     ></div>
                   );
                 }

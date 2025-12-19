@@ -28,6 +28,8 @@ function Piece({
   const prevPosition = position[position.length - 2];
   const pieceRef = useRef(null);
   const touchStartPos = useRef({ x: 0, y: 0 });
+  const isTouchDrag = useRef(false);
+  const touchTimeout = useRef(null);
 
   const generateMoves = () => {
     if (turn === piece[0]) {
@@ -57,10 +59,8 @@ function Piece({
     e.target.style.display = "block";
   };
 
-  const onTouchStart = (e) => {
-    const touch = e.touches[0];
-    touchStartPos.current = { x: touch.clientX, y: touch.clientY };
-
+  const startDrag = (touch) => {
+    isTouchDrag.current = true;
     const el = pieceRef.current;
     el.style.position = "fixed";
     el.style.zIndex = "100";
@@ -69,35 +69,40 @@ function Piece({
     el.style.left = `${touch.clientX - el.offsetWidth / 2}px`;
     el.style.top = `${touch.clientY - el.offsetHeight / 2}px`;
     el.style.transform = "none";
-
+    setSelectedPiece(null);
     generateMoves();
   };
 
-  const onTouchMove = (e) => {
-    e.preventDefault();
+  const onTouchStart = (e) => {
     const touch = e.touches[0];
-    const el = pieceRef.current;
-    el.style.left = `${touch.clientX - el.offsetWidth / 2}px`;
-    el.style.top = `${touch.clientY - el.offsetHeight / 2}px`;
+    touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+    isTouchDrag.current = false;
+
+    touchTimeout.current = setTimeout(() => {
+      startDrag(touch);
+    }, 150);
   };
 
-  const onTouchEnd = (e) => {
-    const el = pieceRef.current;
-    const touch = e.changedTouches[0];
+  const onTouchMove = (e) => {
+    const touch = e.touches[0];
+    const dx = Math.abs(touch.clientX - touchStartPos.current.x);
+    const dy = Math.abs(touch.clientY - touchStartPos.current.y);
 
-    el.style.position = "";
-    el.style.zIndex = "";
-    el.style.width = "";
-    el.style.height = "";
-    el.style.left = "";
-    el.style.top = "";
-    el.style.transform = "";
+    if (!isTouchDrag.current && (dx > 10 || dy > 10)) {
+      clearTimeout(touchTimeout.current);
+      startDrag(touch);
+    }
 
-    onTouchDrop(touch.clientX, touch.clientY, piece, rank, file);
+    if (isTouchDrag.current) {
+      e.preventDefault();
+      const el = pieceRef.current;
+      el.style.left = `${touch.clientX - el.offsetWidth / 2}px`;
+      el.style.top = `${touch.clientY - el.offsetHeight / 2}px`;
+    }
   };
 
   const handlePieceClick = (e) => {
-    e.stopPropagation();
+    if (e && e.stopPropagation) e.stopPropagation();
 
     if (
       selectedPiece &&
@@ -142,11 +147,10 @@ function Piece({
         position: currentPosition,
       });
 
-      dispatch(makeNewMove({ newPosition, newMove }));
-      
       const opponent = selectedPieceData.startsWith("b") ? "w" : "b";
       const opponentCastleDirection = castleDirection[opponent];
 
+      dispatch(makeNewMove({ newPosition, newMove }));
 
       if (arbiter.insufficientMatrial(newPosition)) {
         dispatch(detectInSufficientMaterial());
@@ -186,6 +190,26 @@ function Piece({
         generateMoves();
       }
     }
+  };
+
+  const onTouchEnd = (e) => {
+    clearTimeout(touchTimeout.current);
+    const el = pieceRef.current;
+    const touch = e.changedTouches[0];
+
+    if (isTouchDrag.current) {
+      el.style.position = "";
+      el.style.zIndex = "";
+      el.style.width = "";
+      el.style.height = "";
+      el.style.left = "";
+      el.style.top = "";
+      el.style.transform = "";
+      onTouchDrop(touch.clientX, touch.clientY, piece, rank, file);
+    } else {
+      handlePieceClick(e);
+    }
+    isTouchDrag.current = false;
   };
 
   return (
